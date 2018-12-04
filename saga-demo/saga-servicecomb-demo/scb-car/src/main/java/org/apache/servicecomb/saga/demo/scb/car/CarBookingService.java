@@ -31,14 +31,12 @@ class CarBookingService {
   @Compensable(compensationMethod = "cancel")
   void order(CarBooking booking) {
     booking.confirm();
-    bookings.put(booking.getId(), booking);
+    bookings.putIfAbsent(booking.getId(), booking);
   }
 
   void cancel(CarBooking booking) {
-    Integer id = booking.getId();
-    if (bookings.containsKey(id)) {
-      bookings.get(id).cancel();
-    }
+    booking.cancel();
+    bookings.put(booking.getId(), booking);
   }
 
   Collection<CarBooking> getAllBookings() {

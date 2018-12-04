@@ -34,14 +34,12 @@ class HotelBookingService {
       throw new IllegalArgumentException("can not order the rooms large than two");
     }
     booking.confirm();
-    bookings.put(booking.getId(), booking);
+    bookings.putIfAbsent(booking.getId(), booking);
   }
 
   void cancel(HotelBooking booking) {
-    Integer id = booking.getId();
-    if (bookings.containsKey(id)) {
-      bookings.get(id).cancel();
-    }
+    booking.cancel();
+    bookings.put(booking.getId(), booking);
   }
 
   Collection<HotelBooking> getAllBookings() {
